@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张家口濒危保护动物</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", SimSun, serif;
+        }
+        html, body {
+            width: 100vw;
+            min-height: 100vh;
+            background-color: #fffaf5;
+            overflow-x: hidden;
+        }
+
+        /* 头部超大占比横幅 */
+        header {
+            width: 100vw;
+            height: 70vh;
+            background: linear-gradient(150deg, #a8121a, #e53e38);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 60px;
+            letter-spacing: 6px;
+            margin-bottom: 25px;
+        }
+        header .sub-title {
+            font-size: 28px;
+            opacity: 0.95;
+            letter-spacing: 3px;
+        }
+
+        /* 通用板块标题 */
+        .section-title {
+            width: 100%;
+            text-align: center;
+            font-size: 36px;
+            color: #a8121a;
+            padding: 70px 0 35px;
+        }
+        .section-title::after {
+            content: "";
+            width: 130px;
+            height: 4px;
+            background: #a8121a;
+            margin: 20px auto 0;
+            display: block;
+        }
+
+        /* 居中容器 */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* 内容卡片样式 */
+        .item-card {
+            width: 100%;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 22px rgba(168, 18, 26, 0.14);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 45px;
+            cursor: pointer;
+            transition: all 0.35s ease;
+        }
+        .item-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(168, 18, 26, 0.2);
+        }
+        .card-img {
+            width: 45%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .card-text {
+            width: 55%;
+            padding: 40px;
+        }
+        .card-text h3 {
+            font-size: 28px;
+            color: #a8121a;
+            margin-bottom: 18px;
+        }
+        .card-text p {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #555;
+        }
+
+        /* 作品板块背景 */
+        .works-section {
+            background: #fff0e6;
+            padding-bottom: 100px;
+            margin-top: 30px;
+        }
+
+        /* 关于我们板块 */
+        .about-section {
+            background: #fef4e8;
+            padding: 80px 0;
+        }
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 30px;
+            font-size: 18px;
+            line-height: 2.2;
+            color: #444;
+            text-align: center;
+        }
+
+        /* 弹窗遮罩 */
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+        .modal-box {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        /* 动物单图 */
+        .modal-single-img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        /* 作品固定四张图 2*2网格 */
+        .four-img-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        .four-img-grid img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .modal-box h3 {
+            font-size: 30px;
+            color: #a8121a;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .modal-desc {
+            font-size: 18px;
+            line-height: 2.0;
+            color: #444;
+            margin-bottom: 35px;
+        }
+        .close-btn {
+            display: block;
+            width: 140px;
+            height: 50px;
+            line-height: 50px;
+            background: #a8121a;
+            color: #fff;
+            font-size: 17px;
+            border-radius: 10px;
+            margin: 0 auto;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            header {
+                height: 55vh;
+            }
+            header h1 {
+                font-size: 34px;
+            }
+            header .sub-title {
+                font-size: 20px;
+            }
+            .item-card {
+                flex-direction: column;
+            }
+            .card-img, .card-text {
+                width: 100%;
+            }
+            .card-img {
+                height: 220px;
+            }
+            .four-img-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-single-img {
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 头部全屏大标题 -->
+<header>
+    <h1>纸艺守护者</h1>
+    <div class="sub-title">张家口濒危保护动物和剪纸的融合</div>
+</header>
+
+<!-- 第一部分：濒危动物介绍 -->
+<h2 class="section-title">张家口濒危珍稀动物介绍</h2>
+<div class="container">
+    <div class="item-card" onclick="openAnimal(0)">
+        <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/褐马鸡.jpg" class="card-img" alt="褐马鸡">
+        <div class="card-text">
+            <h3>褐马鸡</h3>
+            <p>国家一级保护鸟类，张家口小五台山标志性特有物种，生态价值极高，点击查看详细科普。</p>
+        </div>
+    </div>
+    <div class="item-card" onclick="openAnimal(1)">
+        <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/华北金钱豹.jpg" class="card-img" alt="华北金钱豹">
+        <div class="card-text">
+            <h3>华北金钱豹</h3>
+            <p>山林生态顶端捕食者，张家口山地旗舰物种，维系区域生态平衡，点击了解栖息现状。</p>
+        </div>
+    </div>
+    <div class="item-card" onclick="openAnimal(2)">
+        <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/白枕鹤.jpg" class="card-img" alt="白枕鹤">
+        <div class="card-text">
+            <h3>白枕鹤</h3>
+            <p>白枕鹤为国家一级保护鸟类，栖息湿地沼泽，体态优雅，属珍稀迁徙涉禽。</p>
+        </div>
+    </div>
+    <div class="item-card" onclick="openAnimal(3)">
+        <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/金雕.jpg" class="card-img" alt="金雕">
+        <div class="card-text">
+            <h3>金雕</h3>
+            <p>国家一级保护猛禽，栖息张家口高山崖壁，处于食物链顶端，具有重要生态调控作用。</p>
+        </div>
+    </div>
+    <div class="item-card" onclick="openAnimal(4)">
+        <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/大鸨.jpg" class="card-img" alt="大鸨">
+        <div class="card-text">
+            <h3>大鸨</h3>
+            <p>草原标志性珍禽，体态魁梧，善奔跑，为张家口国家一级保护鸟类。</p>
+        </div>
+    </div>
+</div>
+
+<!-- 第二部分：剪纸作品（弹窗固定四张图） -->
+<section class="works-section">
+    <h2 class="section-title">濒危动物·蔚县剪纸系列作品</h2>
+    <div class="container">
+        <div class="item-card" onclick="openWork(0)">
+            <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/褐马鸡剪纸.jpg" class="card-img" alt="褐马鸡剪纸">
+            <div class="card-text">
+                <h3>褐马鸡·蔚县镂空剪纸系列</h3>
+                <p>整套四款主题创作，非遗雕工融合动物科普，点击查看四张系列作品详情。</p>
+            </div>
+        </div>
+        <div class="item-card" onclick="openWork(1)">
+            <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/华北金钱豹剪纸.jpg" class="card-img" alt="金钱豹剪纸">
+            <div class="card-text">
+                <h3>华北金钱豹·民俗窗花系列</h3>
+                <p>四款不同形制窗花设计，传统纹样结合生态主题，浏览全套四张组图介绍。</p>
+            </div>
+        </div>
+        <div class="item-card" onclick="openWork(2)">
+            <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/z1.jpg" class="card-img" alt="东方白鹤剪纸">
+            <div class="card-text">
+                <h3>白枕鹤·套色剪纸艺术系列</h3>
+                <p>四景套色展现白鹤姿态，湿地守护理念融入创作，查看四张作品图文解说。</p>
+            </div>
+        </div>
+        <div class="item-card" onclick="openWork(3)">
+            <img src="https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/j1.jpg" class="card-img" alt="金雕剪纸">
+            <div class="card-text">
+                <h3>金雕·雄姿创意剪纸四款套装</h3>
+                <p>四种构图凸显猛禽气场，刀法硬朗贴合山地风格，点击浏览四张系列作品。</p>
+            </div>
+        </div>
+        <div class="item-card" onclick="openWork(4)">
+            <img src="https://picsum.photos/id/155/800/500" class="card-img" alt="大鸨剪纸">
+            <div class="card-text">
+                <h3>大鸨·剪纸艺术系列</h3>
+                <p>分为四款单品，设计精巧，查看四张图纸创作详情。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 第三部分：关于我们 制作初衷 -->
+<section class="about-section">
+    <h2 class="section-title">关于我们 · 制作初衷</h2>
+    <div class="about-content">
+        本项目立足张家口本土生态资源与蔚县剪纸非遗文化两大特色板块，以本地濒危保护动物为创作核心，探索自然生态保护与传统民间艺术的创新性融合路径。
+        <br><br>
+        我们深知，张家口拥有褐马鸡、华北金钱豹等多种珍稀野生动物，但其公众认知度仍有待提升；而蔚县剪纸作为国家级非物质文化遗产，亟需通过年轻化、主题化的表达实现活态传承。
+        <br><br>
+          因此，团队秉持“动物科普+剪纸创作”的创新模式，搭建生态保护与非遗传承的双向桥梁。我们致力于让濒危动物走进大众视野，让传统剪纸焕发新生；既传递守护自然的环保理念，也助力本土文旅创意产业的高质量发展。  </div>
+</section>
+
+<!-- 弹窗组件 -->
+<div class="modal-mask" id="modalMask">
+    <div class="modal-box">
+        <div id="modalImgBox"></div>
+        <h3 id="modalTitle"></h3>
+        <p class="modal-desc" id="modalDesc"></p>
+        <div class="close-btn" onclick="closeModal()">关闭详情</div>
+    </div>
+</div>
+
+<script>
+// 动物数据
+const animalData = [
+    {
+        img:"https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/褐马鸡.jpg",
+        title:"褐马鸡 | 张家口小五台山专属保护物种",
+        desc:"褐马鸡为中国特有国家一级保护鸟类，核心栖息地坐落于张家口小五台山国家级自然保护区。外形辨识度极高，耳羽洁白突出，体态雄健勇猛。受栖息地碎片化影响野生种群稀缺，当地建有专属繁育基地与巡护管控机制，是华北生态保护的标志性旗舰物种。"
+    },
+    {
+        img:"https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/华北金钱豹.jpg",
+        title:"华北金钱豹 | 山林生态顶端捕食者",
+        desc:"华北金钱豹栖息于张家口深山区域，掌控林区食物链平衡，斑纹独特、身形矫健，对栖息环境完整性要求严苛。近年生态修复让野生踪迹增多，但依旧属于濒危保护类别，全域禁猎、栖息地保育等措施持续落地守护种群存续。"
+    },
+    {
+        img:"https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/白枕鹤.jpg",
+        title:"白枕鹤 | 迁徙候鸟重点保护对象",
+        desc:"白枕鹤是国家一级重点保护野生动物，属大型迁徙涉禽。它头部侧部裸露呈赤红，耳羽洁白，故名白枕鹤，体羽以灰色为主，腿脚修长。栖息于沼泽、湿地与近水草原，主要在东北亚繁殖，冬季迁徙至南方越冬。以植物种子、昆虫及小型水生生物为食。由于栖息地丧失与人为干扰，种群数量较为稀少，属于易危物种。"
+    },
+    {
+        img:"https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/金雕.jpg",
+        title:"金雕 | 高山珍稀保护猛禽",
+        desc:"金雕常筑巢于张家口高山峭壁，飞行能力强劲、视野敏锐，是典型大型肉食猛禽。在自然生态中负责优化野生动物种群质量，受人为干扰、巢穴破坏影响生存承压，现已纳入国家重点保护名录，实行专项栖息地管护。"
+    },
+    {
+        img:"https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/大鸨.jpg",
+        title:"大鸨 | 区域生态重要野生鸟类",
+        desc:"大鸨为国家一级保护动物，是大型陆生珍稀鸟类。体型粗壮，雄鸟体型硕大，羽色偏棕褐，斑纹隐蔽，善于奔走，飞行缓慢。多栖息于开阔草原与荒草地，性情机警胆小。因栖息地破坏、非法捕猎，种群数量锐减，濒危程度严峻，亟需加强保护。"
+    }
+];
+
+// 作品数据：每项固定4张图
+const workData = [
+    {
+        imgs:["https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/h1.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/h2.jpg","https:/raw.githubusercontent.com//WANpng653/-zhangjiakou-endangered-wildlife/main/h3.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/h4.jpg"],
+        title:"褐马鸡·蔚县镂空剪纸全套系列",
+        desc:"本系列文创作品以褐马鸡为创作核心，将褐马鸡取名为”向向“，萃取蔚县剪纸非遗技艺之精华，创新运用镂空雕刻与色彩晕染的双重技法。作品整体设计简约而不失格调，以中国红为主色调，精准刻画褐马鸡的雄健外形与灵动神韵，将传统非遗文化与现代审美理念完美融合。作品包含四款经典样式：1. 《褐马报春》：以明快的线条勾勒春日生机，展现褐马鸡迎春勃发的活力；2. 《褐马栖兰》：通过细腻的纹理刻画，营造山林间的静谧与雅致；3. 《云间瑞鸡》：构图空灵，意境悠远，于留白之间尽显东方美学的含蓄；4. 《稚趣红韵》：色彩饱满，层次丰富，生动还原褐马鸡在自然中的真实气韵。整个系列依托蔚县剪纸的传统工艺基底，通过设计稿、简约装饰、精细收藏、文创书签、展示挂画等多元形态呈现。既适合作为展馆陈列的艺术展品，亦可作为校园科普、文创售卖的特色载体，让大众在欣赏非遗之美的同时，感受自然生态与传统技艺共生的独特魅力。"
+    },
+    {
+        imgs:["https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/b1.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/b2.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/b3.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/b4.jpg"],
+        title:"华北金钱豹·民俗窗花四件系列",
+        desc:"本系列剪纸以华北金钱豹为核心创作主体，并为其赋予专属形象名“前前”。共推出四款设计：《豹跃繁花》《团花瑞豹》《东方瑞兽》《福豹纳福》，涵盖传统窗花、新春福贴、桌面摆饰、装饰镜框多种形式。作品提炼金钱豹独有斑纹，转化为雅致艺术线条，融合传统民俗吉祥意蕴与生态保护理念，兼具观赏性与现实意义，适用于家居陈设、文旅文创伴手礼及民俗展会展示。"
+    },
+    {
+        imgs:["https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/z2.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/z1.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/z3.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/blob/main/z4.jpg"],
+        title:"优雅白枕鹤·套色剪纸四景创作",
+        desc:"系列剪纸以白枕鹤为创作主角，为其取名“梦梦”，包含《云间双鹤》《松鹤延年》《锦绣鹤羽》《水畔鹤影》四款作品。分别呈现湖面栖息、列队翱翔、单鹤静立、群栖休憩四种意境构图，采用蔚县剪纸套色点染传统工艺，细腻还原白枕鹤雅致身姿。作品融合东方祥瑞内涵，传递湿地守护与候鸟保护理念，适配生态公园、湿地博物馆等主题场景展览陈设。"
+    },
+    {
+        imgs:["https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/j2.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/j3.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/j4.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/j5.jpg"],
+        title:"金雕·山崖雄姿四款剪纸套装",
+        desc:"本系列剪纸以金雕为核心创作主题，将金雕形象命名为“想想”，打造《鹏程万里》《大展宏图》《鹰击长空》《瑞鹰呈祥》四款特色作品。运用利落硬朗的剪纸线条，生动塑造金雕昂首伫立、振翅高飞、凌空盘旋、崖壁栖居四种经典形态，辅以苍劲山石纹理，尽显北方山地苍茫辽阔的自然气质。作品深度结合蔚县非遗剪纸技艺，兼顾传统民俗美学与猛禽生态科普内涵，寓意高远大气，既可作为研学教育实用教具，也可用于展馆艺术陈列、文化推广展示。"
+    },
+    {
+        imgs:["https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/d1.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/d2.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/d3.jpg","https://raw.githubusercontent.com/WANpng653/-zhangjiakou-endangered-wildlife/main/d4.jpg"],
+        title:"大鸨·草原灵禽四件套",
+        desc:"本系列剪纸以国家一级保护动物大鸨为核心，为其打造专属IP形象“进进”，匠心呈现《八角灵鸨》《大鸨衔露》《祥云瑞鸨》《福运鸨来》四款主题作品。作品以蔚县剪纸传统工艺为载体，用利落线条还原大鸨旷野栖息、振翅低飞等灵动姿态，融入八角、祥云、福纹等民俗元素，尽显北方草原气韵，承载吉祥纳福的美好寓意。作品深度融合非遗传承与大鸨生态科普，兼顾艺术审美与环保理念，可作为研学教具、文旅伴手礼，也适用于展馆陈列，助力濒危物种保护与非遗文化活态传播。"
+    }
+];
+
+// DOM
+const modalMask = document.getElementById("modalMask");
+const modalImgBox = document.getElementById("modalImgBox");
+const modalTitle = document.getElementById("modalTitle");
+const modalDesc = document.getElementById("modalDesc");
+
+// 打开动物弹窗
+function openAnimal(index){
+    let item = animalData[index];
+    modalImgBox.innerHTML = `<img src="${item.img}" class="modal-single-img">`;
+    modalTitle.innerText = item.title;
+    modalDesc.innerText = item.desc;
+    modalMask.style.display = "flex";
+    document.body.style.overflow = "hidden";
+}
+
+// 打开作品弹窗 固定四张2*2排布
+function openWork(index){
+    let item = workData[index];
+    let html = '<div class="four-img-grid">';
+    item.imgs.forEach(src=>{
+        html += `<img src="${src}">`;
+    });
+    html += '</div>';
+    modalImgBox.innerHTML = html;
+    modalTitle.innerText = item.title;
+    modalDesc.innerText = item.desc;
+    modalMask.style.display = "flex";
+    document.body.style.overflow = "hidden";
+}
+
+// 关闭弹窗
+function closeModal(){
+    modalMask.style.display = "none";
+    document.body.style.overflow = "auto";
+}
+modalMask.addEventListener("click",e=>{
+    if(e.target === modalMask) closeModal();
+});
+</script>
+</body>
+</html>
